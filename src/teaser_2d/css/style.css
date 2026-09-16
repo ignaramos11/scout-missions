@@ -1,0 +1,1032 @@
+/* ==========================================================================
+   SCOUT - ESCAPE ROOM CATAMARCA (TEASER 2D)
+   Estilos Oscuros Futuristas / Cyber-Civic HUD
+   Paleta: Rojo Borgoña, Dorado #f39c12, Fondos Carbono Profundo
+   ========================================================================== */
+
+:root {
+  /* Paleta Oficial SCOUT */
+  --bg-deep: #07090e;
+  --bg-dark: #0d1117;
+  --bg-card: rgba(19, 24, 35, 0.82);
+  --bg-card-hover: rgba(27, 34, 49, 0.9);
+  --bg-card-border: rgba(243, 156, 18, 0.22);
+  --bg-card-glow: rgba(139, 0, 0, 0.25);
+
+  --burgundy-dark: #4a050f;
+  --burgundy-primary: #8b0000;
+  --burgundy-vibrant: #b11226;
+  --burgundy-glow: rgba(177, 18, 38, 0.45);
+
+  --gold-primary: #f39c12;
+  --gold-hover: #f1c40f;
+  --gold-light: #fef1d6;
+  --gold-glow: rgba(243, 156, 18, 0.5);
+
+  --cyan-accent: #00d2d3;
+  --cyan-glow: rgba(0, 210, 211, 0.35);
+
+  --success-color: #2ecc71;
+  --success-glow: rgba(46, 204, 113, 0.45);
+  --error-color: #e74c3c;
+  --error-glow: rgba(231, 76, 60, 0.45);
+
+  --text-main: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-gold: #f6b93b;
+
+  --font-display: 'Orbitron', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  --shadow-hud: 0 10px 35px -5px rgba(0, 0, 0, 0.65), 0 0 20px -5px var(--burgundy-glow);
+}
+
+/* Reset y Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(circle at 50% 10%, rgba(139, 0, 0, 0.25) 0%, transparent 55%),
+              radial-gradient(circle at 90% 85%, rgba(243, 156, 18, 0.12) 0%, transparent 45%),
+              radial-gradient(circle at 10% 90%, rgba(0, 210, 211, 0.08) 0%, transparent 40%),
+              var(--bg-deep);
+  background-attachment: fixed;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Patrón Cyber-Grid sutil de fondo */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(243, 156, 18, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(243, 156, 18, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Contenedor Principal (Mobile First con límite ergonómico) */
+.scout-wrapper {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ==========================================================================
+   CABECERA HUD (Heads-Up Display)
+   ========================================================================== */
+.scout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.2rem;
+  margin-bottom: 1.25rem;
+  background: rgba(13, 17, 23, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--bg-card-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.brand-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.brand-icon {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, var(--burgundy-vibrant), var(--gold-primary));
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 1.1rem;
+  color: #fff;
+  box-shadow: 0 0 12px var(--gold-glow);
+}
+
+.brand-text h1 {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 1.5px;
+  background: linear-gradient(90deg, #ffffff, var(--gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-transform: uppercase;
+}
+
+.brand-text span {
+  display: block;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+/* Indicadores Superiores (Nivel y Esquiús) */
+.hud-metrics {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.metric-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(26, 33, 46, 0.85);
+  border: 1px solid rgba(243, 156, 18, 0.35);
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--gold-primary);
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+.metric-pill.audio-toggle {
+  cursor: pointer;
+  background: rgba(26, 33, 46, 0.6);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--text-secondary);
+  padding: 0.4rem 0.55rem;
+  transition: var(--transition-fast);
+}
+
+.metric-pill.audio-toggle:hover {
+  border-color: var(--gold-primary);
+  color: var(--gold-primary);
+}
+
+.coin-icon {
+  display: inline-block;
+  font-size: 0.95rem;
+  animation: pulseCoin 2s infinite ease-in-out;
+}
+
+@keyframes pulseCoin {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 2px var(--gold-glow)); }
+  50% { transform: scale(1.15); filter: drop-shadow(0 0 6px var(--gold-glow)); }
+}
+
+/* ==========================================================================
+   BARRA DE PROGRESO DE MISIÓN
+   ========================================================================== */
+.mission-progress-panel {
+  background: rgba(13, 17, 23, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 1.1rem;
+  margin-bottom: 1.25rem;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  font-family: var(--font-display);
+  letter-spacing: 0.5px;
+}
+
+.progress-percentage {
+  color: var(--gold-primary);
+  font-weight: 700;
+}
+
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--burgundy-vibrant), var(--gold-primary));
+  border-radius: var(--radius-full);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 10px var(--gold-glow);
+}
+
+.progress-steps {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.65rem;
+}
+
+.step-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  transition: var(--transition-fast);
+}
+
+.step-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: var(--transition-fast);
+}
+
+.step-indicator.active .step-dot {
+  background: var(--gold-primary);
+  box-shadow: 0 0 8px var(--gold-glow);
+}
+
+.step-indicator.completed {
+  color: var(--success-color);
+}
+
+.step-indicator.completed .step-dot {
+  background: var(--success-color);
+  box-shadow: 0 0 8px var(--success-glow);
+}
+
+/* ==========================================================================
+   PANTALLAS (SPA CONTROLLER)
+   ========================================================================== */
+.screen {
+  display: none;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.screen.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Tarjeta Principal */
+.scout-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--bg-card-border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-hud);
+  position: relative;
+  overflow: hidden;
+}
+
+.scout-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--burgundy-vibrant), var(--gold-primary), var(--burgundy-vibrant));
+}
+
+/* ==========================================================================
+   PANTALLA 1: INTRO
+   ========================================================================== */
+.intro-hero {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.mission-tag {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 1.2px;
+  color: var(--gold-primary);
+  background: rgba(243, 156, 18, 0.12);
+  border: 1px solid rgba(243, 156, 18, 0.3);
+  padding: 0.3rem 0.8rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+}
+
+.intro-title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1.25;
+  margin-bottom: 0.6rem;
+  background: linear-gradient(135deg, #ffffff 40%, var(--gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.intro-badge-alert {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #ff7675;
+  font-size: 0.82rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.pulsing-red-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ff3838;
+  box-shadow: 0 0 10px #ff3838;
+  animation: pulseRed 1.2s infinite ease-in-out;
+}
+
+@keyframes pulseRed {
+  0%, 100% { transform: scale(0.9); opacity: 0.6; }
+  50% { transform: scale(1.3); opacity: 1; }
+}
+
+.story-box {
+  background: rgba(10, 13, 20, 0.75);
+  border-left: 3px solid var(--burgundy-vibrant);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 1.1rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.objectives-panel {
+  margin-bottom: 1.75rem;
+}
+
+.objectives-title {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 0.8px;
+  color: var(--gold-primary);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.objectives-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.objectives-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.88rem;
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.obj-icon {
+  color: var(--gold-primary);
+  font-weight: bold;
+}
+
+.reward-preview-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, rgba(139, 0, 0, 0.35), rgba(243, 156, 18, 0.2));
+  border: 1px solid rgba(243, 156, 18, 0.35);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+}
+
+.reward-preview-banner span {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+}
+
+.reward-badge-gold {
+  font-family: var(--font-display);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--gold-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* ==========================================================================
+   PANTALLA 2: GAMEPLAY (ACERTIJOS)
+   ========================================================================== */
+.level-badge {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.level-reward-tag {
+  background: rgba(243, 156, 18, 0.15);
+  border: 1px solid rgba(243, 156, 18, 0.3);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+}
+
+.puzzle-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+
+.puzzle-visual {
+  position: relative;
+  width: 100%;
+  height: 210px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: 1.15rem;
+  border: 1px solid rgba(243, 156, 18, 0.2);
+  background: #11141e;
+}
+
+.puzzle-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.scout-card:hover .puzzle-visual img {
+  transform: scale(1.02);
+}
+
+.puzzle-overlay-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(13, 17, 23, 0.85);
+  backdrop-filter: blur(8px);
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  color: var(--gold-primary);
+  border: 1px solid rgba(243, 156, 18, 0.3);
+  font-family: var(--font-display);
+}
+
+.puzzle-hint {
+  background: rgba(15, 20, 30, 0.8);
+  border-left: 3px solid var(--gold-primary);
+  padding: 0.85rem 1rem;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+  margin-bottom: 1.25rem;
+}
+
+.puzzle-question-box {
+  margin-bottom: 1.25rem;
+}
+
+.puzzle-question {
+  font-size: 1.02rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #fff;
+}
+
+/* Opciones Múltiples */
+.options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.option-btn {
+  width: 100%;
+  background: rgba(22, 28, 41, 0.75);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 0.95rem 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-main);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.option-btn:hover:not(:disabled) {
+  background: rgba(33, 42, 62, 0.95);
+  border-color: var(--gold-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(243, 156, 18, 0.15);
+}
+
+.option-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.option-btn .opt-prefix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: var(--gold-primary);
+  margin-right: 0.8rem;
+  flex-shrink: 0;
+}
+
+.option-btn .opt-text {
+  flex-grow: 1;
+}
+
+.option-btn .opt-status-icon {
+  font-size: 1.1rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+/* Estados de Respuesta */
+.option-btn.correct {
+  background: rgba(46, 204, 113, 0.18) !important;
+  border-color: var(--success-color) !important;
+  color: #fff;
+  box-shadow: 0 0 20px var(--success-glow);
+}
+
+.option-btn.correct .opt-prefix {
+  background: var(--success-color);
+  color: #fff;
+}
+
+.option-btn.correct .opt-status-icon {
+  opacity: 1;
+  color: var(--success-color);
+}
+
+.option-btn.incorrect {
+  background: rgba(231, 76, 60, 0.18) !important;
+  border-color: var(--error-color) !important;
+  animation: shakeError 0.4s ease;
+  box-shadow: 0 0 15px var(--error-glow);
+}
+
+.option-btn.incorrect .opt-prefix {
+  background: var(--error-color);
+  color: #fff;
+}
+
+.option-btn.incorrect .opt-status-icon {
+  opacity: 1;
+  color: var(--error-color);
+}
+
+@keyframes shakeError {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+/* Panel de Feedback Dinámico */
+.feedback-card {
+  display: none;
+  padding: 1rem 1.15rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.25rem;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.feedback-card.success {
+  display: block;
+  background: rgba(46, 204, 113, 0.12);
+  border: 1px solid rgba(46, 204, 113, 0.4);
+}
+
+.feedback-card.error {
+  display: block;
+  background: rgba(231, 76, 60, 0.12);
+  border: 1px solid rgba(231, 76, 60, 0.4);
+}
+
+.feedback-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+}
+
+.feedback-card.success .feedback-title {
+  color: var(--success-color);
+}
+
+.feedback-card.error .feedback-title {
+  color: var(--error-color);
+}
+
+.feedback-desc {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.lore-callout {
+  margin-top: 0.65rem;
+  padding-top: 0.65rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  font-size: 0.82rem;
+  color: var(--text-gold);
+  font-style: italic;
+}
+
+/* Botones Principales CTA */
+.btn-cta {
+  width: 100%;
+  background: linear-gradient(135deg, var(--burgundy-vibrant), var(--burgundy-dark));
+  border: 1px solid var(--gold-primary);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  font-weight: 700;
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  text-transform: uppercase;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 18px var(--burgundy-glow);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-cta::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(60deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transform: rotate(30deg);
+  transition: 0.6s;
+}
+
+.btn-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px var(--gold-glow);
+  background: linear-gradient(135deg, #c91830, var(--burgundy-primary));
+}
+
+.btn-cta:hover::after {
+  left: 100%;
+}
+
+.btn-cta:active {
+  transform: translateY(0);
+}
+
+.btn-cta.btn-next {
+  display: none;
+  background: linear-gradient(135deg, #e67e22, var(--gold-primary));
+  color: #0b0c10;
+  box-shadow: 0 4px 20px var(--gold-glow);
+}
+
+.btn-cta.btn-next:hover {
+  background: linear-gradient(135deg, var(--gold-primary), #f39c12);
+}
+
+/* ==========================================================================
+   PANTALLA 3: VICTORIA & REGISTRO BETA ANDROID
+   ========================================================================== */
+.victory-hero {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.victory-trophy-container {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.25rem;
+  background: radial-gradient(circle, rgba(243, 156, 18, 0.3) 0%, transparent 70%);
+  border: 2px solid var(--gold-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  box-shadow: 0 0 30px var(--gold-glow);
+  animation: floatTrophy 3s infinite ease-in-out;
+}
+
+@keyframes floatTrophy {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.victory-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  background: linear-gradient(90deg, #ffffff, var(--gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.victory-summary-card {
+  background: rgba(14, 18, 27, 0.85);
+  border: 1px solid rgba(243, 156, 18, 0.3);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.75rem;
+  text-align: center;
+}
+
+.grand-total-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, rgba(139, 0, 0, 0.4), rgba(243, 156, 18, 0.3));
+  border: 1px solid var(--gold-primary);
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gold-primary);
+  margin-bottom: 0.85rem;
+  box-shadow: 0 0 15px var(--gold-glow);
+}
+
+.victory-desc {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+.victory-subdesc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Formulario Beta 3D Android */
+.beta-form-container {
+  background: rgba(10, 13, 20, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 1.35rem;
+  position: relative;
+}
+
+.beta-form-header {
+  margin-bottom: 1.25rem;
+}
+
+.beta-form-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  color: var(--gold-primary);
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.beta-form-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.78rem;
+  font-family: var(--font-display);
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+}
+
+.form-control {
+  width: 100%;
+  background: rgba(22, 28, 41, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.95rem;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  transition: var(--transition-fast);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--gold-primary);
+  box-shadow: 0 0 10px var(--gold-glow);
+  background: rgba(28, 36, 52, 0.95);
+}
+
+.form-control::placeholder {
+  color: #64748b;
+}
+
+.form-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.form-check input[type="checkbox"] {
+  margin-top: 0.2rem;
+  accent-color: var(--gold-primary);
+  cursor: pointer;
+}
+
+/* Tarjeta de Éxito de Registro Beta (Pase VIP) */
+.beta-success-ticket {
+  display: none;
+  text-align: center;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, rgba(46, 204, 113, 0.15), rgba(13, 17, 23, 0.9));
+  border: 1.5px solid var(--success-color);
+  border-radius: var(--radius-md);
+  animation: fadeIn 0.4s ease;
+}
+
+.ticket-icon {
+  font-size: 2.2rem;
+  color: var(--success-color);
+  margin-bottom: 0.5rem;
+}
+
+.ticket-code {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  letter-spacing: 2px;
+  color: var(--gold-primary);
+  background: rgba(0, 0, 0, 0.4);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+  margin: 0.75rem 0;
+  border: 1px dashed var(--gold-primary);
+}
+
+.ticket-note {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.btn-restart {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  margin-top: 0.5rem;
+}
+
+.btn-restart:hover {
+  border-color: var(--gold-primary);
+  color: var(--gold-primary);
+}
+
+/* ==========================================================================
+   PIE DE PÁGINA INSTITUCIONAL
+   ========================================================================== */
+.scout-footer {
+  margin-top: auto;
+  padding-top: 2rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.footer-tags {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+.footer-badge {
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ==========================================================================
+   MEDIA QUERIES (RESPONSIVE & DESKTOP ENHANCEMENTS)
+   ========================================================================== */
+@media (min-width: 640px) {
+  .scout-wrapper {
+    padding: 2rem 1.5rem 3.5rem;
+  }
+
+  .scout-card {
+    padding: 2rem;
+  }
+
+  .intro-title {
+    font-size: 1.85rem;
+  }
+
+  .puzzle-visual {
+    height: 250px;
+  }
+
+  .puzzle-title {
+    font-size: 1.4rem;
+  }
+}
